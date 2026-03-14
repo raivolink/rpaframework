@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Release notes &mdash; RPA Framework  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6d878a92" />
 
   
@@ -199,6 +199,33 @@
 </section>
 <section id="id4">
 <h2><a class="reference external" href="https://pypi.org/project/rpaframework/#history">Released</a><a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="mar-2026">
+<h3>8 Mar 2026<a class="headerlink" href="#mar-2026" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Fix: Relax <code class="docutils literal notranslate"><span class="pre">selenium</span></code> exact pin (<code class="docutils literal notranslate"><span class="pre">==4.15.2</span></code> → <code class="docutils literal notranslate"><span class="pre">&gt;=4.16.0,&lt;5.0.0</span></code>) to allow co-installation with <code class="docutils literal notranslate"><span class="pre">appium-python-client</span></code> (Appium 3) (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1319">#1319</a>, fixes <a class="reference external" href="https://github.com/robocorp/rpaframework/issues/1312">#1312</a>).</p></li>
+<li><p>Fix: Strip UTF-16 BOM from EdgeDriver version string — Microsoft’s <code class="docutils literal notranslate"><span class="pre">LATEST_RELEASE</span></code> endpoint returns UTF-16 LE, causing <code class="docutils literal notranslate"><span class="pre">%EF%BB%BF</span></code> in the download URL and a 404. Fixed in <code class="docutils literal notranslate"><span class="pre">rpaframework-core</span></code> by subclassing <code class="docutils literal notranslate"><span class="pre">EdgeChromiumDriver</span></code> (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1319">#1319</a>).</p></li>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">RPA.Browser.Selenium</span></code> keywords: <code class="docutils literal notranslate"><span class="pre">Find</span> <span class="pre">Element</span> <span class="pre">Above/Below/To</span> <span class="pre">Left</span> <span class="pre">Of/To</span> <span class="pre">Right</span> <span class="pre">Of/Near</span></code> (selenium 4.x relative locators), <code class="docutils literal notranslate"><span class="pre">Get</span> <span class="pre">Browser</span> <span class="pre">Logs</span></code>, <code class="docutils literal notranslate"><span class="pre">Block</span> <span class="pre">URLs</span></code>, <code class="docutils literal notranslate"><span class="pre">Unblock</span> <span class="pre">URLs</span></code>, <code class="docutils literal notranslate"><span class="pre">Wait</span> <span class="pre">For</span> <span class="pre">Network</span> <span class="pre">Request</span></code>, <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">Virtual</span> <span class="pre">Authenticator</span></code>, <code class="docutils literal notranslate"><span class="pre">Remove</span> <span class="pre">Virtual</span> <span class="pre">Authenticator</span></code> (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1319">#1319</a>).</p></li>
+<li><p>All new Chromium-only keywords raise <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code> with a clear message on non-Chromium drivers (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1319">#1319</a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpaframework</span></code> <strong>31.2.0</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpaframework-core</span></code> <strong>12.1.1</strong></p></li>
+</ul>
+</section>
+<section id="feb-2026">
+<h3>2 Feb 2026<a class="headerlink" href="#feb-2026" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Security: Bump <code class="docutils literal notranslate"><span class="pre">pypdf</span></code> to <code class="docutils literal notranslate"><span class="pre">&gt;=6.6.2</span></code> fixing infinite loop, decompression bomb, and malformed startxref vulnerabilities (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1314">#1314</a>).</p></li>
+<li><p>Security: Remove <code class="docutils literal notranslate"><span class="pre">urllib3</span></code> upper bound in aws package, allowing <code class="docutils literal notranslate"><span class="pre">2.6.3</span></code> on Python &gt;=3.10 to fix decompression bomb bypass vulnerabilities (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1314">#1314</a>).</p></li>
+<li><p>Security: Remove <code class="docutils literal notranslate"><span class="pre">wrapt</span></code> upper bound to avoid dependency resolver conflicts (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1314">#1314</a>).</p></li>
+<li><p>Security: Remove <code class="docutils literal notranslate"><span class="pre">pip</span></code> upper bound in invocations requirements fixing Windows CI failures (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1314">#1314</a>).</p></li>
+<li><p>CI: Replace deprecated <code class="docutils literal notranslate"><span class="pre">macos-13</span></code> runners with <code class="docutils literal notranslate"><span class="pre">macos-latest</span></code> across all workflows (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1314">#1314</a>).</p></li>
+<li><p>CI: Disable assistant workflow due to <code class="docutils literal notranslate"><span class="pre">robocorp-flet</span></code> httpx incompatibility.</p></li>
+<li><p>Fix PDF checkbox test for <code class="docutils literal notranslate"><span class="pre">pypdf</span></code> 6.6.2 name serialization change (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1314">#1314</a>).</p></li>
+<li><p>Upgrade transitive dependencies across all package lock files to address Dependabot alerts (<a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1315">#1315</a>, <a class="reference external" href="https://github.com/robocorp/rpaframework/pull/1316">#1316</a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpaframework</span></code> <strong>31.1.1</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpaframework-aws</span></code> <strong>7.0.2</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rpaframework-pdf</span></code> <strong>10.0.2</strong></p></li>
+</ul>
+</section>
 <section id="nov-2025">
 <h3>24 Nov 2025<a class="headerlink" href="#nov-2025" title="Link to this heading"></a></h3>
 <ul class="simple">
