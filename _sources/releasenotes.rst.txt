@@ -12,9 +12,116 @@ Latest versions
 `Upcoming release <https://github.com/robocorp/rpaframework/projects/3#column-16713994>`_
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+No changes planned yet for the next release.
 
 `Released <https://pypi.org/project/rpaframework/#history>`_
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+23 Aug 2026
+-----------
+
+- **Breaking:** Remove the long-deprecated ``RPA.Desktop.Windows`` library (pywinauto-based).
+  It has emitted a deprecation warning pointing to ``RPA.Windows`` since being deprecated in
+  favor of it, and is no longer maintained. Use ``RPA.Windows`` for all Windows UI automation
+  going forward (fixes :issue:`1322`).
+- **Security:** ``RPA.Archive``: Fix a Zip Slip path traversal vulnerability (CWE-22) in
+  ``Extract Archive`` — archive members with path traversal sequences (e.g.
+  ``../../evil.py``) could previously be extracted outside the requested destination
+  directory. Extraction now validates that every member resolves within the destination
+  before extracting, raising ``ValueError`` otherwise (fixes :issue:`1339`, :issue:`1340`).
+- ``rpaframework-core``: Fix the Windows locator parser silently mis-tokenizing a strategy
+  when the locator value contained a stray ``locator=`` prefix or an unmatched quote
+  character (e.g. produced a bogus ``locator='executable`` strategy instead of recognizing
+  ``executable:``), with a clearer warning surfaced when this happens (fixes :issue:`1323`).
+- ``RPA.Desktop``: ``Highlight Elements`` now returns the list of matched element regions
+  instead of ``None``, exposing coordinates that were already being computed internally
+  (fixes :issue:`1324`).
+- ``rpaframework-core``: Match ``executable:`` locators case-insensitively. Windows file
+  names are case-insensitive, but the comparison was not, so ``executable:notepad.exe``
+  could not find a process that Windows lists as ``Notepad.exe`` — as it does on Windows 11.
+  ``handle:`` matching is numeric and is unchanged.
+- **Security:** Bump ``soupsieve`` ≥2.8.4 (HIGH — memory exhaustion via large
+  comma-separated selector lists, CVE-2026-49476) in the root and ``rpaframework``
+  lock files.
+- **Security:** Bump ``pillow`` ≥12.3.0 (HIGH — heap out-of-bounds write in
+  ``ImageCmsTransform.apply()``, CVE-2026-59205; decompression-bomb DoS in
+  ``PdfParser.PdfStream.decode()``, CVE-2026-59200) across all packages.
+- **Security:** Bump ``cryptography`` ≥50.0.0 (HIGH — Bleichenbacher oracle in PKCS#7
+  ``EnvelopedData`` decryption, CVE-2026-69247) across all packages.
+- **Security:** Bump ``pypdf`` ≥6.15.0 (MEDIUM — large memory usage for large
+  ``/ToUnicode`` streams, CVE-2026-71870) in ``rpaframework-pdf``.
+- **Security:** Bump ``pyasn1`` ≥0.6.4 (HIGH — BER/CER/DER decoder DoS via unbounded
+  long-form tag IDs, CVE-2026-59884) and ``httplib2`` ≥0.32.0 (HIGH — decompression-bomb
+  DoS via unbounded gzip/deflate handling, CVE-2026-59939) in ``rpaframework-google``.
+- **Security:** Bump ``setuptools`` ≥83.0.0 (MEDIUM — ``MANIFEST.in`` exclusion bypass via
+  Unicode normalization collision, CVE-2026-59890) in ``rpaframework-sema4ai``.
+- ``rpaframework``: Require ``rpaframework-core`` ≥13.0.2, so a fresh install cannot
+  resolve a core that predates the Windows locator fixes ``RPA.Windows`` relies on.
+
+- ``rpaframework-core`` **13.0.3**
+- ``rpaframework-pdf`` **11.0.2**
+- ``rpaframework-recognition`` **8.0.2**
+- ``rpaframework-google`` **12.0.1**
+- ``rpaframework-sema4ai`` **1.1.1**
+- ``rpaframework`` **33.0.1**
+
+29 Jun 2026
+-----------
+
+- **Security:** Bump the following dependencies across all package lock files:
+
+  - ``cryptography`` ≥48.0.1 (HIGH — vulnerable OpenSSL bundled in wheels)
+  - ``PyJWT`` ≥2.13.0 (HIGH/MEDIUM/LOW — SSRF via JWK/JWKS, algorithm allow-list bypass,
+    DoS; CVE-2026-48522 through CVE-2026-48526)
+  - ``pypdf`` ≥6.13.3 (MEDIUM — missing stream length limits; supersedes CVE-2026-48155
+    fix from :pr:`1334`)
+  - ``msgpack`` ≥1.2.1 (HIGH — out-of-bounds read/crash on Unpacker reuse)
+  - ``zeep`` ≥4.3.3 (MEDIUM — SSRF)
+  - ``pytest`` ≥9.0.3 and ``Pygments`` ≥2.20.0 in the root dev lock (:pr:`1334`)
+
+  Direct dependency floors tightened in ``rpaframework`` (``cryptography``, ``PyJWT``)
+  and ``rpaframework-pdf`` (``pypdf``); ``msgpack`` pinned via override in
+  ``rpaframework-assistant``.
+- ``rpaframework-core``: Lower the truststore certificate-store log messages from ``INFO`` to ``DEBUG`` so they no longer appear on every run's console (fixes :issue:`1220`, :issue:`1093`, :issue:`1210`) (:pr:`1335`).
+- ``rpaframework-recognition``: Relax the ``numpy`` constraint from ``<2.0.0`` to allow numpy 2.x, fixing installation on Python 3.13 where numpy 1.26.x has no prebuilt wheel and a source build is attempted. Adds the Python 3.13 classifier (fixes :issue:`1331`) (:pr:`1336`).
+
+- ``rpaframework-core`` **13.0.1**
+- ``rpaframework-recognition`` **8.0.1**
+- ``rpaframework-pdf`` **11.0.1**
+- ``rpaframework`` **32.0.1**
+
+28 May 2026
+-----------
+
+- **Security:** Bump ``urllib3`` ≥2.7.0 (CVE-2026-44431), ``idna`` ≥3.16 (CVE-2026-45409), ``pytest`` ≥9.0.3 (CVE-2025-71176), ``werkzeug`` ≥3.1.8 (CVE-2026-27199), ``python-dotenv`` ≥1.2.2 (CVE-2026-28684), ``Pygments`` ≥2.20.0 (CVE-2026-4539) across all package lock files (:pr:`1333`).
+- ``rpaframework-aws``: Tighten ``urllib3`` direct dependency floor to ``≥2.7.0`` (was ``≥1.25.4``) to enforce the security fix for end users (:pr:`1333`).
+
+- ``rpaframework-aws`` **8.0.1**
+
+4 May 2026
+----------
+
+- **Breaking:** Drop Python 3.9 support (EOL Oct 2025), minimum is now Python 3.10 (:pr:`1329`).
+- **Security:** Bump ``pillow`` ≥12.2.0, ``PyJWT`` ≥2.12.0, ``cryptography`` ≥46.0.7, ``requests`` ≥2.33.0, ``pypdf`` ≥6.10.2, ``pyasn1`` ≥0.6.3, ``lxml`` ≥6.1.0, ``urllib3`` ≥2.6.3 (:pr:`1330`).
+- **Dependencies:** Replace ``pynput-robocorp-fork`` with upstream ``pynput`` ≥1.8.1; unblocks Python 3.13 on macOS (:pr:`1328`).
+- ``RPA.Windows``: New ``Get Checkbox State`` keyword to retrieve the toggle state of a checkbox control, returning ``True`` (checked), ``False`` (unchecked) or ``None`` (indeterminate) (:pr:`1326`).
+- ``RPA.Windows``: ``Select`` keyword now raises an error when the requested value cannot be found (:pr:`1320`, :pr:`1326`).
+- ``rpaframework-core``: Fix locator parser not handling single-quoted names with spaces — both single and double quotes are now accepted as value delimiters (:pr:`1320`).
+- ``rpaframework-core``: Fix ``path:`` locator ignoring the active timeout — each step now retries until the deadline expires (:pr:`1320`).
+- ``RPA.Database``: Fix ``Connect To Database`` for ``psycopg``/``psycopg2`` — now passes ``dbname`` instead of ``database`` to match the driver's expected parameter name (:pr:`1325`).
+- ``rpaframework-recognition``: Expose Tesseract confidence score alongside OCR text matches (:pr:`1327`).
+- ``rpaframework-assistant``: Migrate from ``robocorp-flet`` fork to official ``flet`` ≥0.82.0; adds per-dialog theme support (:pr:`1321`).
+
+- ``rpaframework`` **32.0.0**
+- ``rpaframework-core`` **13.0.0**
+- ``rpaframework-pdf`` **11.0.0**
+- ``rpaframework-windows`` **11.0.0**
+- ``rpaframework-recognition`` **8.0.0**
+- ``rpaframework-aws`` **8.0.0**
+- ``rpaframework-google`` **12.0.0**
+- ``rpaframework-hubspot`` **4.0.0**
+- ``rpaframework-openai`` **5.0.0**
+- ``rpaframework-assistant`` **6.0.0**
 
 8 Mar 2026
 ----------
